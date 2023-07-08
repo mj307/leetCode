@@ -5,35 +5,33 @@ Find and return the maximum profit you can achieve.
 '''
 
 # this first part creates a list of the days the stocks rise and by how much they increase
-prices = [1,2,3,4,5]
+prices = [6,1,3,2,4,7]
 print (prices)
 profit_list = []
-max = 0 # biggest difference in value between buying and selling
 total_profit = 0 # total profit made
-for buyingDay in range(0,len(prices)):
-    for sellingDay in range(buyingDay+1,len(prices)):
-        if max < prices[sellingDay] - prices[buyingDay]:
-            max = prices[sellingDay] - prices[buyingDay]
-            profit_list.append([max, buyingDay, sellingDay])
-    total_profit += max
-    max = 0
+for buyingDay in range(0,len(prices)-1):
+    sellingDay = buyingDay+1
+    if 0 < prices[sellingDay] - prices[buyingDay]:
+        profit_list.append([prices[sellingDay] - prices[buyingDay], buyingDay, sellingDay])
 
-# this second part arranges the list in order of biggest to smallest profit made across any two days
+# this second part arranges the list in order of potential buying days
 from operator import itemgetter
-profit_list = sorted(profit_list, key=itemgetter(0),reverse=True)
-
+profit_list = sorted(profit_list, key=itemgetter(1))
+print (profit_list)
 # this third part sees which combination of days will yield the highest profits
 max_profit = 0
 for profit in range(0, len(profit_list)):
+    print ("NEW: "+ str(profit_list[profit]))
     total_profit = profit_list[profit][0]
     sellingDay = profit_list[profit][2]
     buyingDay = profit_list[profit][1]
     for each in range(profit+1, len(profit_list)):
         if profit_list[each][1] >= sellingDay:
+            print ("HERE "+str(profit_list[each]))
             total_profit += profit_list[each][0]
             sellingDay = profit_list[each][2]
     if max_profit < total_profit:
         max_profit = total_profit
-
+    print (max_profit)
 print (max_profit)
 
